@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PDF XML Sync
 
-## Getting Started
+Adjunte archivos XML a documentos PDF de forma rápida, segura y 100% local.
 
-First, run the development server:
+Combina su comprobante electrónico (factura, boleta, nota) con su representación PDF en un solo archivo, sin enviar ningún dato a servidores externos.
+
+## Características
+
+- **100% local** — Todo el procesamiento ocurre en el navegador. Ningún archivo se envía a la nube.
+- **Drag & drop** — Arrastre y suelte sus archivos PDF y XML directamente en la interfaz.
+- **Bilingüe** — Interfaz en Español e Inglés con toggle de idioma persistente.
+- **Sin registro** — No se requiere crear cuenta ni instalar nada.
+- **Procesamiento instantáneo** — El resultado se descarga automáticamente al hacer clic.
+- **Estándar PDF** — Utiliza archivos adjuntos embebidos del estándar PDF, compatible con cualquier lector.
+
+## Stack tecnológico
+
+- [Next.js 16](https://nextjs.org/) (App Router)
+- [React 19](https://react.dev/)
+- [pdf-lib](https://pdf-lib.js.org/) — Manipulación de PDFs en el navegador
+- [Tailwind CSS 4](https://tailwindcss.com/)
+- [TypeScript 5](https://www.typescriptlang.org/)
+
+## Instalación
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/pdfxml_sync.git
+cd pdfxml_sync
+
+# Instalar dependencias
+pnpm install
+
+# Iniciar en modo desarrollo
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Uso
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Abra la aplicación en su navegador.
+2. Arrastre o seleccione un archivo **PDF** de su comprobante electrónico.
+3. Arrastre o seleccione el archivo **XML** asociado.
+4. Haga clic en **Adjuntar XML al PDF**.
+5. El PDF con el XML incrustado se descargará automáticamente.
 
-## Learn More
+## Estructura del proyecto
 
-To learn more about Next.js, take a look at the following resources:
+```
+pdfxml_sync/
+├── app/
+│   ├── components/
+│   │   ├── AttachButton.tsx      # Botón de procesamiento con spinner
+│   │   ├── FileDropZone.tsx      # Zona drag-and-drop + file picker
+│   │   ├── FilePreview.tsx       # Preview del archivo seleccionado
+│   │   ├── Header.tsx            # Barra de navegación sticky
+│   │   └── LanguageToggle.tsx    # Toggle de idioma ES/EN
+│   ├── hooks/
+│   │   ├── useFileHandler.ts     # Manejo de archivos y validación
+│   │   └── usePdfProcessor.ts    # Procesamiento PDF + XML
+│   ├── i18n/
+│   │   ├── context.tsx           # Provider de idioma (useSyncExternalStore)
+│   │   └── translations.ts       # Textos ES/EN
+│   ├── globals.css               # Estilos Tailwind
+│   ├── layout.tsx                # Layout raíz
+│   └── page.tsx                  # Landing page + herramienta
+├── lib/
+│   └── pdf/
+│       └── attach-xml-to-pdf.ts  # Lógica de adjuntar XML a PDF
+└── package.json
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Privacidad
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Todos los archivos se procesan exclusivamente en el navegador del usuario. No se realizan uploads a servidores, no se almacenan copias temporales en la nube y no se rastrea actividad. Una vez descargado el resultado, los archivos originales se eliminan de la memoria del dispositivo.
 
-## Deploy on Vercel
+## Licencia
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
