@@ -1,6 +1,7 @@
 "use client";
 
 import { useFileHandler } from "@/app/hooks/useFileHandler";
+import { useMultiFileHandler } from "@/app/hooks/useMultiFileHandler";
 import { usePdfProcessor } from "@/app/hooks/usePdfProcessor";
 import Header from "@/app/components/Header";
 import FileDropZone from "@/app/components/FileDropZone";
@@ -57,17 +58,21 @@ function HeroSection() {
 
 function ToolSection() {
   const { t } = useLanguage();
-  const pdfHandler = useFileHandler(".pdf");
+  const multiPdfHandler = useMultiFileHandler(".pdf");
   const xmlHandler = useFileHandler(".xml");
-  const { loading, error, process } = usePdfProcessor();
+  const { loading, error, processMultiple } = usePdfProcessor();
 
-  const ready = pdfHandler.file !== null && xmlHandler.file !== null && !loading;
+  const ready = multiPdfHandler.files.length > 0 && xmlHandler.file !== null && !loading;
 
   const handleAttach = () => {
-    if (pdfHandler.file && xmlHandler.file) {
-      process(pdfHandler.file, xmlHandler.file);
+    if (multiPdfHandler.files.length > 0 && xmlHandler.file) {
+      processMultiple(multiPdfHandler.files, xmlHandler.file);
     }
   };
+
+  const buttonLabel = loading
+    ? t.processingMultiple.replace("{{count}}", String(multiPdfHandler.files.length))
+    : t.mergeAttach;
 
   return (
     <section className="bg-white py-10 sm:py-14">
@@ -79,16 +84,18 @@ function ToolSection() {
 
         <div className="mt-8 space-y-5 rounded-2xl border border-gray-200 bg-white p-5 shadow-lg sm:p-7">
           <FileDropZone
-            file={pdfHandler.file}
-            error={pdfHandler.error}
-            isDragging={pdfHandler.isDragging}
+            files={multiPdfHandler.files}
+            error={multiPdfHandler.errors.length > 0 ? multiPdfHandler.errors[0] : null}
+            isDragging={multiPdfHandler.isDragging}
             fileType="pdf"
-            onDrop={pdfHandler.onDrop}
-            onDragOver={pdfHandler.onDragOver}
-            onDragEnter={pdfHandler.onDragEnter}
-            onDragLeave={pdfHandler.onDragLeave}
-            onFileSelect={pdfHandler.onFileSelect}
-            onClear={pdfHandler.clearFile}
+            multiple
+            onDrop={multiPdfHandler.onDrop}
+            onDragOver={multiPdfHandler.onDragOver}
+            onDragEnter={multiPdfHandler.onDragEnter}
+            onDragLeave={multiPdfHandler.onDragLeave}
+            onFileSelect={multiPdfHandler.onFileSelect}
+            onClear={multiPdfHandler.clearAll}
+            onRemoveFile={multiPdfHandler.removeFile}
           />
           <FileDropZone
             file={xmlHandler.file}
@@ -102,7 +109,7 @@ function ToolSection() {
             onFileSelect={xmlHandler.onFileSelect}
             onClear={xmlHandler.clearFile}
           />
-          <AttachButton onClick={handleAttach} disabled={!ready} loading={loading} />
+          <AttachButton onClick={handleAttach} disabled={!ready} loading={loading} label={buttonLabel} />
 
           {error && (
             <div className="flex items-center justify-center gap-2 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">

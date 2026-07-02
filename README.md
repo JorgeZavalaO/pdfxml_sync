@@ -7,7 +7,8 @@ Combina su comprobante electrónico (factura, boleta, nota) con su representaci�
 ## Características
 
 - **100% local** — Todo el procesamiento ocurre en el navegador. Ningún archivo se envía a la nube.
-- **Drag & drop** — Arrastre y suelte sus archivos PDF y XML directamente en la interfaz.
+- **Fusión de PDFs** — Selecciona múltiples PDFs y se fusionan en un solo documento antes de adjuntar el XML.
+- **Drag & drop** — Arrastre y suelte sus archivos PDF (uno o varios) y XML directamente en la interfaz.
 - **Bilingüe** — Interfaz en Español e Inglés con toggle de idioma persistente.
 - **Sin registro** — No se requiere crear cuenta ni instalar nada.
 - **Procesamiento instantáneo** — El resultado se descarga automáticamente al hacer clic.
@@ -40,10 +41,10 @@ Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
 ## Uso
 
 1. Abra la aplicación en su navegador.
-2. Arrastre o seleccione un archivo **PDF** de su comprobante electrónico.
+2. Arrastre o seleccione uno o varios archivos **PDF** (se fusionarán en orden).
 3. Arrastre o seleccione el archivo **XML** asociado.
-4. Haga clic en **Adjuntar XML al PDF**.
-5. El PDF con el XML incrustado se descargará automáticamente.
+4. Haga clic en **Fusionar PDFs y adjuntar XML**.
+5. El PDF fusionado con el XML incrustado se descargará automáticamente.
 
 ## Estructura del proyecto
 
@@ -57,7 +58,8 @@ pdfxml_sync/
 │   │   ├── Header.tsx            # Barra de navegación sticky
 │   │   └── LanguageToggle.tsx    # Toggle de idioma ES/EN
 │   ├── hooks/
-│   │   ├── useFileHandler.ts     # Manejo de archivos y validación
+│   │   ├── useFileHandler.ts     # Manejo de un archivo y validación
+│   │   ├── useMultiFileHandler.ts # Manejo de múltiples archivos
 │   │   └── usePdfProcessor.ts    # Procesamiento PDF + XML
 │   ├── i18n/
 │   │   ├── context.tsx           # Provider de idioma (useSyncExternalStore)
@@ -67,7 +69,7 @@ pdfxml_sync/
 │   └── page.tsx                  # Landing page + herramienta
 ├── lib/
 │   └── pdf/
-│       └── attach-xml-to-pdf.ts  # Lógica de adjuntar XML a PDF
+│       └── attach-xml-to-pdf.ts  # Adjuntar XML + fusión de PDFs
 └── package.json
 ```
 

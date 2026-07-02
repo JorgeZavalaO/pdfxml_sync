@@ -50,18 +50,23 @@ export const translations = {
       "Todos los archivos se procesan exclusivamente en tu navegador. No se realiza ninguna carga a servidores, no se almacenan copias temporales en la nube y no se rastrea tu actividad. Una vez que descargas el resultado, los archivos originales se eliminan de la memoria de tu dispositivo.",
 
     // Tool section
-    toolTitle: "Adjuntar XML al PDF",
+    toolTitle: "Fusionar PDFs y adjuntar XML",
     toolDesc:
       "Selecciona tus archivos a continuación. El proceso es completamente automático.",
 
     // Drop zones
     dropPdf: "Arrastra el archivo PDF aquí",
+    dropPdfs: "Arrastra los archivos PDF aquí",
     dropXml: "Arrastra el archivo XML aquí",
     dropPdfActive: "Suelta el PDF aquí",
+    dropPdfsActive: "Suelta los PDFs aquí",
     dropXmlActive: "Suelta el XML aquí",
     browse: "Seleccionar archivo",
+    browseMultiple: "Seleccionar archivos",
     processing: "Procesando...",
+    processingMultiple: "Fusionando {{count}} PDFs...",
     attach: "Adjuntar XML al PDF",
+    mergeAttach: "Fusionar PDFs y adjuntar XML",
     success: "PDF con XML adjunto descargado correctamente",
 
     // Error messages
@@ -74,12 +79,14 @@ export const translations = {
     // File types
     fileTypes: {
       pdf: "Documento PDF",
+      pdfs: "Documentos PDF",
       xml: "Archivo XML",
     },
 
     // Misc
     size: "Tamaño",
     remove: "Eliminar",
+    nFilesSelected: "{{count}} PDFs seleccionados",
     ready: "Listo para adjuntar",
     language: "Idioma",
 
@@ -138,18 +145,23 @@ export const translations = {
       "All files are processed exclusively in your browser. No uploads to servers, no temporary cloud copies, no activity tracking. Once you download the result, the original files are removed from your device's memory.",
 
     // Tool section
-    toolTitle: "Attach XML to PDF",
+    toolTitle: "Merge PDFs and attach XML",
     toolDesc:
       "Select your files below. The process is fully automatic.",
 
     // Drop zones
     dropPdf: "Drop the PDF file here",
+    dropPdfs: "Drop the PDF files here",
     dropXml: "Drop the XML file here",
     dropPdfActive: "Release to drop the PDF",
+    dropPdfsActive: "Release to drop the PDFs",
     dropXmlActive: "Release to drop the XML",
     browse: "Browse files",
+    browseMultiple: "Browse files",
     processing: "Processing...",
+    processingMultiple: "Merging {{count}} PDFs...",
     attach: "Attach XML to PDF",
+    mergeAttach: "Merge PDFs and attach XML",
     success: "PDF with attached XML downloaded successfully",
 
     // Error messages
@@ -162,12 +174,14 @@ export const translations = {
     // File types
     fileTypes: {
       pdf: "PDF Document",
+      pdfs: "PDF Documents",
       xml: "XML File",
     },
 
     // Misc
     size: "Size",
     remove: "Remove",
+    nFilesSelected: "{{count}} PDFs selected",
     ready: "Ready to attach",
     language: "Language",
 

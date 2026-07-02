@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { attachXmlToPdf } from "@/lib/pdf/attach-xml-to-pdf";
+import { attachXmlToPdf, mergePdfsAndAttachXml } from "@/lib/pdf/attach-xml-to-pdf";
 
 export function usePdfProcessor() {
   const [loading, setLoading] = useState(false);
@@ -15,6 +15,18 @@ export function usePdfProcessor() {
       reader.readAsArrayBuffer(file);
     });
   };
+
+  const downloadPdf = useCallback((bytes: Uint8Array, filename: string) => {
+    const blob = new Blob([bytes.slice()], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, []);
 
   const process = useCallback(async (pdfFile: File, xmlFile: File) => {
     setLoading(true);
@@ -32,26 +44,32 @@ export function usePdfProcessor() {
         description: "XML del comprobante electrónico",
       });
 
-      const blob = new Blob([new Uint8Array(result)], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
       const baseName = pdfFile.name.replace(/\.pdf$/i, "");
-      a.download = `${baseName}_con_xml.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      downloadPdf(result, `${baseName}_con_xml.pdf`);
     } catch {
       setError("processingError");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [downloadPdf]);
+
+  const processMultiple = useCallback(async (pdfFiles: File[], xmlFile: File) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const xmlBytes = await readFileAsArrayBuffer(xmlFile);
+      const result = await mergePdfsAndAttachXml(pdfFiles, xmlBytes, xmlFile.name);
+      downloadPdf(result, "pdfs_fusionados_con_xml.pdf");
+    } catch {
+      setError("processingError");
+    } finally {
+      setLoading(false);
+    }
+  }, [downloadPdf]);
 
   const reset = useCallback(() => {
     setError(null);
   }, []);
 
-  return { loading, error, process, reset };
+  return { loading, error, process, processMultiple, reset };
 }

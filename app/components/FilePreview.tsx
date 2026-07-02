@@ -5,6 +5,7 @@ import { useLanguage } from "@/app/i18n/context";
 type FilePreviewProps = {
   file: File;
   fileType: "pdf" | "xml";
+  index?: number;
   onClear: () => void;
 };
 
@@ -14,7 +15,7 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export default function FilePreview({ file, fileType, onClear }: FilePreviewProps) {
+export default function FilePreview({ file, fileType, index, onClear }: FilePreviewProps) {
   const { t } = useLanguage();
 
   const icon =
@@ -31,6 +32,11 @@ export default function FilePreview({ file, fileType, onClear }: FilePreviewProp
   return (
     <div className="flex items-center gap-3 rounded-lg border border-green-300 bg-green-50 px-4 py-3">
       {icon}
+      {index !== undefined && (
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-medium text-blue-700">
+          {index + 1}
+        </span>
+      )}
       <div className="flex-1 min-w-0">
         <p className="truncate text-sm font-medium text-gray-900">{file.name}</p>
         <p className="text-xs text-gray-500">

@@ -5,29 +5,35 @@ import { useLanguage } from "@/app/i18n/context";
 import FilePreview from "./FilePreview";
 
 type FileDropZoneProps = {
-  file: File | null;
+  file?: File | null;
+  files?: File[];
   error: string | null;
   isDragging: boolean;
   fileType: "pdf" | "xml";
+  multiple?: boolean;
   onDrop: (e: DragEvent<HTMLDivElement>) => void;
   onDragOver: (e: DragEvent<HTMLDivElement>) => void;
   onDragEnter: (e: DragEvent<HTMLDivElement>) => void;
   onDragLeave: (e: DragEvent<HTMLDivElement>) => void;
   onFileSelect: (e: ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
+  onRemoveFile?: (index: number) => void;
 };
 
 export default function FileDropZone({
   file,
+  files,
   error,
   isDragging,
   fileType,
+  multiple,
   onDrop,
   onDragOver,
   onDragEnter,
   onDragLeave,
   onFileSelect,
   onClear,
+  onRemoveFile,
 }: FileDropZoneProps) {
   const { t } = useLanguage();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -36,16 +42,19 @@ export default function FileDropZone({
     inputRef.current?.click();
   };
 
-  const dropText = fileType === "pdf" ? t.dropPdf : t.dropXml;
-  const dropActiveText = fileType === "pdf" ? t.dropPdfActive : t.dropXmlActive;
-  const fileTypeLabel = fileType === "pdf" ? t.fileTypes.pdf : t.fileTypes.xml;
-  const accept = fileType === "pdf" ? ".pdf" : ".xml";
+  const isPdf = fileType === "pdf";
+  const dropText = isPdf ? (multiple ? t.dropPdfs : t.dropPdf) : t.dropXml;
+  const dropActiveText = isPdf ? (multiple ? t.dropPdfsActive : t.dropPdfActive) : t.dropXmlActive;
+  const fileTypeLabel = isPdf ? (multiple ? t.fileTypes.pdfs : t.fileTypes.pdf) : t.fileTypes.xml;
+  const accept = isPdf ? ".pdf" : ".xml";
+
+  const hasFiles = multiple ? (files && files.length > 0) : file !== null;
 
   const borderColor = error
     ? "border-red-400 bg-red-50"
     : isDragging
     ? "border-blue-400 bg-blue-50"
-    : file
+    : hasFiles
     ? ""
     : "border-gray-300 bg-gray-50";
 
@@ -53,8 +62,22 @@ export default function FileDropZone({
     <div className="flex flex-col gap-2">
       <label className="text-sm font-medium text-gray-700">{fileTypeLabel}</label>
 
-      {file ? (
-        <FilePreview file={file} fileType={fileType} onClear={onClear} />
+      {hasFiles ? (
+        multiple && files ? (
+          <div className="flex flex-col gap-2">
+            {files.map((f, i) => (
+              <FilePreview
+                key={`${f.name}-${f.size}`}
+                file={f}
+                fileType={fileType}
+                index={i}
+                onClear={() => onRemoveFile?.(i)}
+              />
+            ))}
+          </div>
+        ) : file ? (
+          <FilePreview file={file} fileType={fileType} onClear={onClear} />
+        ) : null
       ) : (
         <div
           onDrop={onDrop}
@@ -90,7 +113,7 @@ export default function FileDropZone({
                 }}
                 className="mt-3 rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 ring-1 ring-gray-300 transition-colors hover:bg-gray-50"
               >
-                {t.browse}
+                {multiple ? t.browseMultiple : t.browse}
               </button>
             </>
           )}
@@ -112,6 +135,7 @@ export default function FileDropZone({
         ref={inputRef}
         type="file"
         accept={accept}
+        multiple={multiple}
         onChange={onFileSelect}
         className="hidden"
       />

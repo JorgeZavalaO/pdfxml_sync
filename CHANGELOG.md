@@ -5,6 +5,24 @@
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es/1.1.0/),
 y este proyecto adheres a [Semantic Versioning](https://semver.org/lang/es/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-07-02
+
+### Added
+
+- Soporte para seleccionar múltiples archivos PDF mediante drag-and-drop o file picker.
+- Fusión de múltiples PDFs en un solo documento antes de adjuntar el XML.
+- Nueva función `mergePdfsAndAttachXml` en `lib/pdf/attach-xml-to-pdf.ts`.
+- Hook `useMultiFileHandler` para manejo de archivos múltiples (`File[]`).
+- Prop `multiple` en `FileDropZone` para habilitar selección múltiple de archivos.
+- Visualización de lista con contadores e índice numérico para PDFs seleccionados.
+- Botón de eliminación individual por archivo en modo múltiple.
+
+### Changed
+
+- Flujo principal: ahora se fusionan todos los PDFs seleccionados en uno solo y luego se adjunta el XML.
+- Texto del botón principal adaptativo: "Fusionar N PDFs y adjuntar XML".
+- Versión actualizada a `2.0.0`.
+
 ## [1.0.0] - 2026-07-02
 
 ### Added
